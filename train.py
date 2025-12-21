@@ -75,6 +75,9 @@ def main():
         save_steps=500,
         fp16=True,
         optim="paged_adamw_8bit",
+        gradient_checkpointing=True,
+        gradient_checkpointing_kwargs={
+            "use_reentrant": False},
         report_to="none"
     )
 
