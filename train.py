@@ -73,11 +73,10 @@ def main():
         warmup_ratio=0.03,
         logging_steps=10,
         save_steps=500,
-        fp16=True,
-        optim="adamw_8bit",
-        gradient_checkpointing=False,
-        gradient_checkpointing_kwargs={
-            "use_reentrant": False},
+        save_total_limit=2,
+        fp16=True,                     # работает с adamw_torch
+        optim="adamw_torch",           # самый стабильный
+        gradient_checkpointing=False,  # отключаем — убирает ошибку
         report_to="none"
     )
 
