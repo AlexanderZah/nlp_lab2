@@ -13,7 +13,8 @@ def main():
                                                  trust_remote_code=True,
                                                  device_map="auto")
 
-    model = PeftModel.from_pretrained(model, f"raler/{QUANT_MODEL_NAME_TUNED}")
+    model = PeftModel.from_pretrained(
+        model, f"raler/{QUANT_MODEL_NAME_TUNED}", device_map="auto", torch_dtype="auto")
     model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(
