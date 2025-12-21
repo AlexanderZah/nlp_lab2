@@ -36,7 +36,7 @@ def main():
     model = get_peft_model(model, lora_config)
 
     # Датасет (пример — MMLU auxiliary_train)
-    dataset = load_dataset("cais/mmlu", split="auxiliary_train")
+    dataset = load_dataset("cais/mmlu", split="all")
 
     # ... (форматирование данных, как в предыдущем примере)
 
