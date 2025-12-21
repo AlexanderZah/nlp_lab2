@@ -61,13 +61,14 @@ def main():
     # Датасет (пример — MMLU auxiliary_train)
     dataset = load_dataset("cais/mmlu", "all", split='auxiliary_train')
 
-    dataset = dataset.map(format_example_for_training, num_proc=4)
+    dataset = dataset.shuffle(seed=42).select(range(5000))
+    dataset = dataset.map(format_example_for_training, num_proc=8)
 
     # Тренировка
     training_args = TrainingArguments(
         output_dir="qwen3-8b-qlora-finetuned",
-        per_device_train_batch_size=1,
-        gradient_accumulation_steps=16,
+        per_device_train_batch_size=2,
+        gradient_accumulation_steps=8,
         learning_rate=2e-4,
         max_grad_norm=0.3,
         num_train_epochs=3,
