@@ -60,7 +60,6 @@ def main():
         model=model,
         args=training_args,
         train_dataset=dataset,
-        dataset_text_field="text",  # если вы добавили поле text
         max_seq_length=2048,
     )
 
