@@ -20,7 +20,7 @@ def get_original_model():
     )
 
     size_before_quant_mb = get_model_size(model)
-    print(f'Количество параметров ДО: {size_before_quant_mb:.2f}')
+    print(f'Количество параметров ДО: {size_before_quant_mb:.2f} mb')
 
     average_accuracy_before_quant = get_average_accuracy(model, tokenizer)
     print(
@@ -39,7 +39,7 @@ def get_quant_model():
         QUANT_MODEL_NAME, trust_remote_code=True)
 
     size_after_quant_mb = get_model_size(model)
-    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f}')
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
 
     average_accuracy_after_quant = get_average_accuracy(model, tokenizer)
     print(
@@ -52,8 +52,8 @@ def main():
     get_quant_model()
 
     print('ИТОГ')
-    print(f'Количество параметров ДО: {size_before_quant_mb:.2f}')
-    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f}')
+    print(f'Количество параметров ДО: {size_before_quant_mb:.2f} mb')
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
     print(
         f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
     # Качество на бенчмарке MMLU ДО: 0.65
