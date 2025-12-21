@@ -8,67 +8,73 @@ from datasets import load_dataset
 from config import QUANT_MODEL_NAME, quantization_config
 
 
-model = AutoModelForCausalLM.from_pretrained(
-    QUANT_MODEL_NAME,
-    quantization_config=quantization_config,
-    device_map="auto",
-    trust_remote_code=True
-)
+def main():
 
-tokenizer = AutoTokenizer.from_pretrained(
-    QUANT_MODEL_NAME, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(
+        QUANT_MODEL_NAME,
+        quantization_config=quantization_config,
+        device_map="auto",
+        trust_remote_code=True
+    )
 
-# Подготавливаем модель для QLoRA (важно!)
-model = prepare_model_for_kbit_training(model)
+    tokenizer = AutoTokenizer.from_pretrained(
+        QUANT_MODEL_NAME, trust_remote_code=True)
 
-# LoRA-конфиг
-lora_config = LoraConfig(
-    r=64,
-    lora_alpha=128,
-    target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # для Qwen
-    lora_dropout=0.05,
-    bias="none",
-    task_type="CAUSAL_LM"
-)
+    # Подготавливаем модель для QLoRA (важно!)
+    model = prepare_model_for_kbit_training(model)
 
-model = get_peft_model(model, lora_config)
+    # LoRA-конфиг
+    lora_config = LoraConfig(
+        r=64,
+        lora_alpha=128,
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # для Qwen
+        lora_dropout=0.05,
+        bias="none",
+        task_type="CAUSAL_LM"
+    )
 
-# Датасет (пример — MMLU auxiliary_train)
-dataset = load_dataset("cais/mmlu", split="auxiliary_train")
+    model = get_peft_model(model, lora_config)
 
-# ... (форматирование данных, как в предыдущем примере)
+    # Датасет (пример — MMLU auxiliary_train)
+    dataset = load_dataset("cais/mmlu", split="auxiliary_train")
 
-# Тренировка
-training_args = TrainingArguments(
-    output_dir="qwen3-8b-qlora-finetuned",
-    per_device_train_batch_size=1,
-    gradient_accumulation_steps=16,
-    learning_rate=2e-4,
-    max_grad_norm=0.3,
-    num_train_epochs=3,
-    warmup_ratio=0.03,
-    logging_steps=10,
-    save_steps=500,
-    fp16=True,
-    optim="paged_adamw_8bit",
-    report_to="none"
-)
+    # ... (форматирование данных, как в предыдущем примере)
 
-trainer = SFTTrainer(
-    model=model,
-    args=training_args,
-    train_dataset=dataset,
-    tokenizer=tokenizer,
-    dataset_text_field="text",  # если вы добавили поле text
-    max_seq_length=2048,
-)
+    # Тренировка
+    training_args = TrainingArguments(
+        output_dir="qwen3-8b-qlora-finetuned",
+        per_device_train_batch_size=1,
+        gradient_accumulation_steps=16,
+        learning_rate=2e-4,
+        max_grad_norm=0.3,
+        num_train_epochs=3,
+        warmup_ratio=0.03,
+        logging_steps=10,
+        save_steps=500,
+        fp16=True,
+        optim="paged_adamw_8bit",
+        report_to="none"
+    )
 
-trainer.train()
+    trainer = SFTTrainer(
+        model=model,
+        args=training_args,
+        train_dataset=dataset,
+        tokenizer=tokenizer,
+        dataset_text_field="text",  # если вы добавили поле text
+        max_seq_length=2048,
+    )
 
-# Сохраняем только LoRA-адаптер (маленький!)
-trainer.model.save_pretrained("qwen3-8b-qlora-finetuned")
-tokenizer.save_pretrained("qwen3-8b-qlora-finetuned")
+    trainer.train()
 
-# Можно сразу запушить на HF
-trainer.model.push_to_hub("raler/qwen3-8b-qlora-finetuned")
-tokenizer.push_to_hub("raler/qwen3-8b-qlora-finetuned")
+    # Сохраняем только LoRA-адаптер (маленький!)
+    trainer.model.save_pretrained("qwen3-8b-qlora-finetuned")
+    tokenizer.save_pretrained("qwen3-8b-qlora-finetuned")
+
+    # Можно сразу запушить на HF
+    trainer.model.push_to_hub("raler/qwen3-8b-qlora-finetuned")
+    tokenizer.push_to_hub("raler/qwen3-8b-qlora-finetuned")
+
+
+if __name__ == '__main__':
+    main()
