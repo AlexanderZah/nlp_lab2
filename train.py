@@ -1,9 +1,10 @@
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, AdamW
+from transformers import AutoModelForCausalLM, AutoTokenizer
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 from transformers import TrainingArguments
 from datasets import load_dataset
+from torch.optim import AdamW
 
 from config import QUANT_MODEL_NAME, quantization_config
 
