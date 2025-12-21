@@ -1,4 +1,4 @@
-from config import ORIGINAL_MODEL_NAME, quantization_config
+from config import ORIGINAL_MODEL_NAME, QUANT_MODEL_NAME, QUANT_MODEL_NAME_TUNED, quantization_config
 from peft import PeftModel
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
@@ -7,17 +7,17 @@ from utils import evaluate_subset, get_average_accuracy, get_model_size, load_mm
 
 def main():
     tokenizer = AutoTokenizer.from_pretrained(
-        ORIGINAL_MODEL_NAME, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(ORIGINAL_MODEL_NAME,
+        QUANT_MODEL_NAME, trust_remote_code=True)
+    model = AutoModelForCausalLM.from_pretrained(QUANT_MODEL_NAME,
                                                  quantization_config=quantization_config,
                                                  trust_remote_code=True,
                                                  device_map="auto")
 
-    model = PeftModel.from_pretrained(model, "raler/qwen3-8b-qlora-finetuned")
+    model = PeftModel.from_pretrained(model, f"raler/{QUANT_MODEL_NAME_TUNED}")
     model.eval()
 
     tokenizer = AutoTokenizer.from_pretrained(
-        "raler/qwen3-8b-qlora-finetuned", trust_remote_code=True)
+        f"raler/{QUANT_MODEL_NAME_TUNED}", trust_remote_code=True)
 
     average_accuracy = get_average_accuracy(model, tokenizer)
     print(f'Качество на бенчмарке MMLU: {average_accuracy:.2f}')
