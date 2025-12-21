@@ -3,6 +3,11 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from utils import get_average_accuracy, get_model_size
 from config import ORIGINAL_MODEL_NAME, QUANT_MODEL_NAME, quantization_config
 
+size_before_quant_mb = 0
+size_after_quant_mb = 0
+average_accuracy_before_quant = 0
+average_accuracy_after_quant = 0
+
 
 def get_original_model():
     tokenizer = AutoTokenizer.from_pretrained(
@@ -17,8 +22,9 @@ def get_original_model():
     size_before_quant_mb = get_model_size(model)
     print(f'Количество параметров ДО: {size_before_quant_mb:.2f}')
 
-    average_accuracy = get_average_accuracy(model, tokenizer)
-    print(f'Качество на бенчмарке MMLU ДО: {average_accuracy:.2f}')
+    average_accuracy_before_quant = get_average_accuracy(model, tokenizer)
+    print(
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
 
 
 def get_quant_model():
@@ -32,19 +38,26 @@ def get_quant_model():
     tokenizer = AutoTokenizer.from_pretrained(
         QUANT_MODEL_NAME, trust_remote_code=True)
 
-    size_before_quant_mb = get_model_size(model)
-    print(f'Количество параметров ПОСЛЕ: {size_before_quant_mb:.2f}')
+    size_after_quant_mb = get_model_size(model)
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f}')
 
-    average_accuracy = get_average_accuracy(model, tokenizer)
-    print(f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy:.2f}')
+    average_accuracy_after_quant = get_average_accuracy(model, tokenizer)
+    print(
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.2f}')
 
 
 def main():
     get_original_model()
 
-    print()
-
     get_quant_model()
+
+    print('ИТОГ')
+    print(f'Количество параметров ДО: {size_before_quant_mb:.2f}')
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f}')
+    print(
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
+    print(
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.2f}')
 
 
 if __name__ == '__main__':

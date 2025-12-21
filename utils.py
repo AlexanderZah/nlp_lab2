@@ -137,3 +137,5 @@ def get_average_accuracy(model, tokenizer):
         all_samples += samples
 
     average_accuracy = sum(all_accuracies) / all_samples
+
+    return average_accuracy
