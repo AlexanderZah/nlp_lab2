@@ -95,12 +95,12 @@ def main():
     trainer.train()
 
     # Сохраняем только LoRA-адаптер (маленький!)
-    trainer.model.save_pretrained(QUANT_MODEL_NAME_TUNED)
-    tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
+    # trainer.model.save_pretrained(QUANT_MODEL_NAME_TUNED)
+    # tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
 
-    # Можно сразу запушить на HF
-    trainer.model.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
-    tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
+    # # Можно сразу запушить на HF
+    # trainer.model.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
+    # tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
 
 
 if __name__ == '__main__':
