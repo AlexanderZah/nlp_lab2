@@ -8,6 +8,28 @@ from datasets import load_dataset
 from config import QUANT_MODEL_NAME, quantization_config
 
 
+def format_example_for_training(example):
+    """
+    Адаптируем вашу функцию format_example для обучения:
+    - Добавляем вопрос + варианты + правильный ответ.
+    - Без subject, т.к. он не нужен в промпте.
+    """
+    prompt = example["question"]
+    options = example["choices"]
+
+    for i, option in enumerate(options):
+        choice_letter = chr(65 + i)  # A, B, C, D
+        prompt += f"\n{choice_letter}. {option}"
+
+    prompt += "\nAnswer:"
+
+    # Добавляем правильный ответ
+    correct_letter = chr(65 + example["answer"])
+    prompt += f" {correct_letter}\n\n"
+
+    return {"text": prompt}
+
+
 def main():
 
     model = AutoModelForCausalLM.from_pretrained(
@@ -38,7 +60,7 @@ def main():
     # Датасет (пример — MMLU auxiliary_train)
     dataset = load_dataset("cais/mmlu", "all", split='auxiliary_train')
 
-    # ... (форматирование данных, как в предыдущем примере)
+    dataset = dataset.map(format_example_for_training, num_proc=4)
 
     # Тренировка
     training_args = TrainingArguments(
