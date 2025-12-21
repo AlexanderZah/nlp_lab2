@@ -88,8 +88,7 @@ def main():
         model=model,
         args=training_args,
         train_dataset=dataset,
-        optimizers=(optimizer, None),
-        use_amp=False
+        optimizers=(optimizer, None)
     )
 
     trainer.train()
