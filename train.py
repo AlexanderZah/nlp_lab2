@@ -36,7 +36,7 @@ def main():
     model = get_peft_model(model, lora_config)
 
     # Датасет (пример — MMLU auxiliary_train)
-    dataset = load_dataset("cais/mmlu", "all")
+    dataset = load_dataset("cais/mmlu", "all", split='auxiliary_train')
 
     # ... (форматирование данных, как в предыдущем примере)
 
@@ -60,7 +60,6 @@ def main():
         model=model,
         args=training_args,
         train_dataset=dataset,
-        tokenizer=tokenizer,
         dataset_text_field="text",  # если вы добавили поле text
         max_seq_length=2048,
     )
