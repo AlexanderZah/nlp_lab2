@@ -74,11 +74,11 @@ def main():
         logging_steps=10,
         save_steps=500,
         save_total_limit=2,
-        fp16=True,
+        fp16=False,
         optim="paged_adamw_32bit",
         gradient_checkpointing=True,  # отключаем — убирает ошибку
         report_to="none",
-        fp16=False
+
     )
 
     trainer = SFTTrainer(
