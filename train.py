@@ -74,16 +74,18 @@ def main():
         logging_steps=10,
         save_steps=500,
         save_total_limit=2,
-        fp16=True,                     # работает с adamw_torch
-        optim="adamw_torch",           # самый стабильный
-        gradient_checkpointing=False,  # отключаем — убирает ошибку
-        report_to="none"
+        fp16=True,
+        optim="paged_adamw_32bit",
+        gradient_checkpointing=True,  # отключаем — убирает ошибку
+        report_to="none",
+        # fp16=False
     )
 
     trainer = SFTTrainer(
         model=model,
         args=training_args,
-        train_dataset=dataset
+        train_dataset=dataset,
+        # use_amp=False
     )
 
     trainer.train()
