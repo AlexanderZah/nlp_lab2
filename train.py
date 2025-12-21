@@ -10,11 +10,6 @@ from config import QUANT_MODEL_NAME, QUANT_MODEL_NAME_TUNED, quantization_config
 
 
 def format_example_for_training(example):
-    """
-    Адаптируем вашу функцию format_example для обучения:
-    - Добавляем вопрос + варианты + правильный ответ.
-    - Без subject, т.к. он не нужен в промпте.
-    """
     prompt = example["question"]
     options = example["choices"]
 
@@ -50,7 +45,7 @@ def main():
     lora_config = LoraConfig(
         r=64,
         lora_alpha=128,
-        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],  # для Qwen
+        target_modules=["q_proj", "k_proj", "v_proj", "o_proj"],
         lora_dropout=0.05,
         bias="none",
         task_type="CAUSAL_LM"
@@ -78,7 +73,7 @@ def main():
         save_total_limit=2,
         fp16=False,
         optim="paged_adamw_32bit",
-        gradient_checkpointing=True,  # отключаем — убирает ошибку
+        gradient_checkpointing=True,
         report_to="none",
 
     )
@@ -94,11 +89,9 @@ def main():
 
     trainer.train()
 
-    # Сохраняем только LoRA-адаптер (маленький!)
     # trainer.model.save_pretrained(QUANT_MODEL_NAME_TUNED)
     # tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
 
-    # # Можно сразу запушить на HF
     # trainer.model.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
     # tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
 
