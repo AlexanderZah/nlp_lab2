@@ -1,5 +1,5 @@
 import torch
-from transformers import AutoModelForCausalLM, AutoTokenizer, BitsAndBytesConfig
+from transformers import AutoModelForCausalLM, AutoTokenizer, AdamW
 from peft import LoraConfig, get_peft_model, prepare_model_for_kbit_training
 from trl import SFTTrainer
 from transformers import TrainingArguments
@@ -80,12 +80,15 @@ def main():
         report_to="none",
 
     )
+    lora_params = [p for n, p in model.named_parameters() if p.requires_grad]
 
+    optimizer = AdamW(lora_params, lr=2e-4)
     trainer = SFTTrainer(
         model=model,
         args=training_args,
         train_dataset=dataset,
-        # use_amp=False
+        optimizers=(optimizer, None),
+        use_amp=False
     )
 
     trainer.train()
