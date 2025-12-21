@@ -59,8 +59,7 @@ def main():
     trainer = SFTTrainer(
         model=model,
         args=training_args,
-        train_dataset=dataset,
-        max_seq_length=2048,
+        train_dataset=dataset
     )
 
     trainer.train()
