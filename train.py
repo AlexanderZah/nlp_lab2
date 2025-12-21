@@ -78,7 +78,7 @@ def main():
         optim="paged_adamw_32bit",
         gradient_checkpointing=True,  # отключаем — убирает ошибку
         report_to="none",
-        # fp16=False
+        fp16=False
     )
 
     trainer = SFTTrainer(
