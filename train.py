@@ -6,7 +6,7 @@ from transformers import TrainingArguments
 from datasets import load_dataset
 from torch.optim import AdamW
 
-from config import QUANT_MODEL_NAME, quantization_config
+from config import QUANT_MODEL_NAME, QUANT_MODEL_NAME_TUNED, quantization_config
 
 
 def format_example_for_training(example):
@@ -61,7 +61,7 @@ def main():
     # Датасет (пример — MMLU auxiliary_train)
     dataset = load_dataset("cais/mmlu", "all", split='auxiliary_train')
 
-    dataset = dataset.shuffle(seed=42).select(range(5000))
+    dataset = dataset.shuffle(seed=42).select(range(100))
     dataset = dataset.map(format_example_for_training, num_proc=8)
 
     # Тренировка
@@ -95,12 +95,12 @@ def main():
     trainer.train()
 
     # Сохраняем только LoRA-адаптер (маленький!)
-    trainer.model.save_pretrained("qwen3-8b-qlora-finetuned")
-    tokenizer.save_pretrained("qwen3-8b-qlora-finetuned")
+    trainer.model.save_pretrained(QUANT_MODEL_NAME_TUNED)
+    tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
 
     # Можно сразу запушить на HF
-    trainer.model.push_to_hub("raler/qwen3-8b-qlora-finetuned")
-    tokenizer.push_to_hub("raler/qwen3-8b-qlora-finetuned")
+    trainer.model.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
+    tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
 
 
 if __name__ == '__main__':

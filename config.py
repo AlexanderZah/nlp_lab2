@@ -3,6 +3,7 @@ import torch
 
 ORIGINAL_MODEL_NAME = "Qwen/Qwen3-8B"
 QUANT_MODEL_NAME = "raler/compressed_model_BitsAndBytesConfig_4bit"
+QUANT_MODEL_NAME_TUNED = "qwen3-8b-qlora-finetuned1"
 
 quantization_config = BitsAndBytesConfig(
     load_in_4bit=True,
