@@ -56,6 +56,7 @@ def main():
     print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f}')
     print(
         f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
+    # Качество на бенчмарке MMLU ДО: 0.65
     print(
         f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.2f}')
 
