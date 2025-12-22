@@ -24,8 +24,8 @@ def main():
     print(f'Качество на бенчмарке MMLU: {average_accuracy:.4f}')
     model_size = get_model_size(model)
     print(f'Размер модели: {model_size:.2f} mb')
-    # Качество на бенчмарке MMLU: 0.65
-    # Размер модели: 5920.5881
+    # Качество на бенчмарке MMLU: 0.6550
+    # Размер модели: 5920.59 mb
 
 
 if __name__ == '__main__':
