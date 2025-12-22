@@ -61,10 +61,10 @@ def main():
     print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
     # Количество параметров ПОСЛЕ: 5686.59 mb
     print(
-        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
     # Качество на бенчмарке MMLU ДО: 0.66
     print(
-        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.2f}')
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
     # Качество на бенчмарке MMLU ПОСЛЕ: 0.65
     Compression_ratio = size_before_quant_mb / size_after_quant_mb
     Performance_drop = (average_accuracy_before_quant -
@@ -72,6 +72,14 @@ def main():
     Score = Compression_ratio / (1 + Performance_drop)
     print(
         f'Score: {Score:.2f}')
+    '''
+    ИТОГ
+    Количество параметров ДО: 15622.59 mb
+    Количество параметров ПОСЛЕ: 5686.59 mb
+    Качество на бенчмарке MMLU ДО: 0.6579
+    Качество на бенчмарке MMLU ПОСЛЕ: 0.6550
+    Score: 2.74
+    '''
 
 
 if __name__ == '__main__':
