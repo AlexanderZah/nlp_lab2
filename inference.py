@@ -21,9 +21,9 @@ def main():
         f"raler/{QUANT_MODEL_NAME_TUNED}", trust_remote_code=True)
 
     average_accuracy = get_average_accuracy(model, tokenizer)
-    print(f'Качество на бенчмарке MMLU: {average_accuracy:.2f}')
+    print(f'Качество на бенчмарке MMLU: {average_accuracy:.4f}')
     model_size = get_model_size(model)
-    print(f'Размер модели: {model_size:.4f} mb')
+    print(f'Размер модели: {model_size:.2f} mb')
     # Качество на бенчмарке MMLU: 0.65
     # Размер модели: 5920.5881
 
