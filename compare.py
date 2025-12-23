@@ -26,7 +26,7 @@ def get_original_model():
     # Количество параметров ДО: 15622.59 mb
     average_accuracy_before_quant = get_average_accuracy(model, tokenizer)
     print(
-        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.2f}')
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
     # Качество на бенчмарке MMLU ДО: 0.66
 
 
@@ -47,7 +47,7 @@ def get_quant_model():
 
     average_accuracy_after_quant = get_average_accuracy(model, tokenizer)
     print(
-        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.2f}')
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
 
 
 def main():
