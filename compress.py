@@ -18,7 +18,7 @@ def main():
     model.eval()
 
     model_size = get_model_size(model)
-    print(f'Размер модели: {model_size:.2f} mb')
+    print(f'Размер модели: {model_size:.6f} mb')
 
 
 if __name__ == '__main__':

@@ -26,12 +26,12 @@ def get_original_model():
     )
 
     size_before_quant_mb = get_model_size(original_model)
-    print(f'Количество параметров ДО: {size_before_quant_mb:.2f} mb')
+    print(f'Количество параметров ДО: {size_before_quant_mb:.6f} mb')
     # Количество параметров ДО: 15622.59 mb
     average_accuracy_before_quant = get_average_accuracy(
         original_model, original_tokenizer)
     print(
-        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.6f}')
     # Качество на бенчмарке MMLU ДО: 0.66
 
 
@@ -48,12 +48,12 @@ def get_quant_model():
         QUANT_MODEL_NAME, trust_remote_code=True)
 
     size_after_quant_mb = get_model_size(quant_model)
-    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.6f} mb')
 
     average_accuracy_after_quant = get_average_accuracy(
         quant_model, quant_tokenizer)
     print(
-        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.6f}')
 
 
 def main():
@@ -62,22 +62,22 @@ def main():
     get_quant_model()
 
     print('ИТОГ')
-    print(f'Количество параметров ДО: {size_before_quant_mb:.2f} mb')
+    print(f'Количество параметров ДО: {size_before_quant_mb:.6f} mb')
     # Количество параметров ДО: 15622.59 mb
-    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
+    print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.6f} mb')
     # Количество параметров ПОСЛЕ: 5686.59 mb
     print(
-        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
+        f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.6f}')
     # Качество на бенчмарке MMLU ДО: 0.6579
     print(
-        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
+        f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.6f}')
     # Качество на бенчмарке MMLU ПОСЛЕ: 0.6550
     Compression_ratio = size_before_quant_mb / size_after_quant_mb
     Performance_drop = (average_accuracy_before_quant -
                         average_accuracy_after_quant) / average_accuracy_before_quant
     Score = Compression_ratio / (1 + Performance_drop)
     print(
-        f'Score: {Score:.2f}')
+        f'Score: {Score:.6f}')
     '''
     ИТОГ
     Количество параметров ДО: 15622.59 mb

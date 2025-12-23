@@ -121,7 +121,7 @@ def evaluate_subset(model, subset_name, subset_data, tokenizer, verbose=False):
     accuracy = correct_predictions / total_samples
     if verbose:
         print(
-            f"Точность для {subset_name}: {accuracy:.4f} ({correct_predictions}/{total_samples})")
+            f"Точность для {subset_name}: {accuracy:.6f} ({correct_predictions}/{total_samples})")
     return accuracy, total_samples
 
 
