@@ -6,10 +6,12 @@ from utils import evaluate_subset, get_average_accuracy, get_model_size, load_mm
 
 quant_model_tuned = None
 quant_tokenizer = None
+average_accuracy_quant_model_tuned = None
+model_size_quant_model_tuned = None
 
 
 def main():
-    global quant_tokenizer, quant_model_tuned
+    global quant_tokenizer, quant_model_tuned, average_accuracy_quant_model_tuned, model_size_quant_model_tuned
     quant_tokenizer = AutoTokenizer.from_pretrained(
         QUANT_MODEL_NAME, trust_remote_code=True)
     quant_model_tuned = AutoModelForCausalLM.from_pretrained(QUANT_MODEL_NAME,
@@ -24,10 +26,12 @@ def main():
     tokenizer = AutoTokenizer.from_pretrained(
         f"raler/{QUANT_MODEL_NAME_TUNED}", trust_remote_code=True)
 
-    average_accuracy = get_average_accuracy(quant_model_tuned, tokenizer)
-    print(f'Качество на бенчмарке MMLU: {average_accuracy:.6f}')
-    model_size = get_model_size(quant_model_tuned)
-    print(f'Размер модели: {model_size:.6f} mb')
+    average_accuracy_quant_model_tuned = get_average_accuracy(
+        quant_model_tuned, tokenizer)
+    print(
+        f'Качество на бенчмарке MMLU: {average_accuracy_quant_model_tuned:.6f}')
+    model_size_quant_model_tuned = get_model_size(quant_model_tuned)
+    print(f'Размер модели: {model_size_quant_model_tuned:.6f} mb')
     # Качество на бенчмарке MMLU: 0.6550
     # Размер модели: 5920.59 mb
 
