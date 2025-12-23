@@ -13,7 +13,7 @@
 ### Этап 1 — Компрессия модели (пост-трейнинг)
 
 
-В данной реализации используется **4-битная квантизация NF4 + double quantization** (BitsAndBytes).
+В данной реализации используется **4-битная квантизация NF4 + double quantization** (BitsAndBytes). Веса хранятся в репозитории Hugging face `raler/compressed_model_BitsAndBytesConfig_4bit`.
 
 ### Этап 2 — Дообучение сжатой модели
 
