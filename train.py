@@ -8,6 +8,9 @@ from torch.optim import AdamW
 
 from config import QUANT_MODEL_NAME, QUANT_MODEL_NAME_TUNED, quantization_config
 
+quant_model_tuned = None
+quant_tokenizer = None
+
 
 def format_example_for_training(example):
     prompt = example["question"]
@@ -27,19 +30,19 @@ def format_example_for_training(example):
 
 
 def main():
-
-    model = AutoModelForCausalLM.from_pretrained(
+    global quant_model_tuned, quant_tokenizer
+    quant_model_tuned = AutoModelForCausalLM.from_pretrained(
         QUANT_MODEL_NAME,
         quantization_config=quantization_config,
         device_map="auto",
         trust_remote_code=True
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    quant_tokenizer = AutoTokenizer.from_pretrained(
         QUANT_MODEL_NAME, trust_remote_code=True)
 
     # Подготавливаем модель для QLoRA (важно!)
-    model = prepare_model_for_kbit_training(model)
+    quant_model_tuned = prepare_model_for_kbit_training(quant_model_tuned)
 
     # LoRA-конфиг
     lora_config = LoraConfig(
@@ -51,7 +54,7 @@ def main():
         task_type="CAUSAL_LM"
     )
 
-    model = get_peft_model(model, lora_config)
+    quant_model_tuned = get_peft_model(quant_model_tuned, lora_config)
 
     # Датасет (пример — MMLU auxiliary_train)
     dataset = load_dataset("cais/mmlu", "all", split='auxiliary_train')
@@ -77,11 +80,12 @@ def main():
         report_to="none",
 
     )
-    lora_params = [p for n, p in model.named_parameters() if p.requires_grad]
+    lora_params = [p for n, p in quant_model_tuned.named_parameters()
+                   if p.requires_grad]
 
     optimizer = AdamW(lora_params, lr=2e-4)
     trainer = SFTTrainer(
-        model=model,
+        model=quant_model_tuned,
         args=training_args,
         train_dataset=dataset,
         optimizers=(optimizer, None)
@@ -90,10 +94,10 @@ def main():
     trainer.train()
 
     # trainer.model.save_pretrained(QUANT_MODEL_NAME_TUNED)
-    # tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
+    # quant_tokenizer.save_pretrained(QUANT_MODEL_NAME_TUNED)
 
     # trainer.model.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
-    # tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
+    # quant_tokenizer.push_to_hub(f"raler/{QUANT_MODEL_NAME_TUNED}")
 
 
 if __name__ == '__main__':

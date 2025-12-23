@@ -7,45 +7,51 @@ size_before_quant_mb = 0
 size_after_quant_mb = 0
 average_accuracy_before_quant = 0
 average_accuracy_after_quant = 0
+quant_model = None
+quant_tokenizer = None
+original_model = None
+original_tokenizer = None
 
 
 def get_original_model():
-    global size_before_quant_mb, average_accuracy_before_quant
+    global size_before_quant_mb, average_accuracy_before_quant, original_model, original_tokenizer
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    original_tokenizer = AutoTokenizer.from_pretrained(
         ORIGINAL_MODEL_NAME, trust_remote_code=True)
-    model = AutoModelForCausalLM.from_pretrained(
+    original_model = AutoModelForCausalLM.from_pretrained(
         ORIGINAL_MODEL_NAME,
         trust_remote_code=True,
         device_map="auto",
         torch_dtype="auto"
     )
 
-    size_before_quant_mb = get_model_size(model)
+    size_before_quant_mb = get_model_size(original_model)
     print(f'Количество параметров ДО: {size_before_quant_mb:.2f} mb')
     # Количество параметров ДО: 15622.59 mb
-    average_accuracy_before_quant = get_average_accuracy(model, tokenizer)
+    average_accuracy_before_quant = get_average_accuracy(
+        original_model, original_tokenizer)
     print(
         f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
     # Качество на бенчмарке MMLU ДО: 0.66
 
 
 def get_quant_model():
-    global size_after_quant_mb, average_accuracy_after_quant
-    model = AutoModelForCausalLM.from_pretrained(
+    global size_after_quant_mb, average_accuracy_after_quant, quant_tokenizer, quant_model
+    quant_model = AutoModelForCausalLM.from_pretrained(
         QUANT_MODEL_NAME,
         quantization_config=quantization_config,
         device_map="auto",
         trust_remote_code=True
     )
 
-    tokenizer = AutoTokenizer.from_pretrained(
+    quant_tokenizer = AutoTokenizer.from_pretrained(
         QUANT_MODEL_NAME, trust_remote_code=True)
 
-    size_after_quant_mb = get_model_size(model)
+    size_after_quant_mb = get_model_size(quant_model)
     print(f'Количество параметров ПОСЛЕ: {size_after_quant_mb:.2f} mb')
 
-    average_accuracy_after_quant = get_average_accuracy(model, tokenizer)
+    average_accuracy_after_quant = get_average_accuracy(
+        quant_model, quant_tokenizer)
     print(
         f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
 

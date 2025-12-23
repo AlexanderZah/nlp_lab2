@@ -3,8 +3,12 @@ from transformers import AutoModelForCausalLM, AutoTokenizer
 from utils import get_model_size
 from config import ORIGINAL_MODEL_NAME, quantization_config
 
+quant_model = None
+tokenizer = None
+
 
 def main():
+    global quant_model, tokenizer
     tokenizer = AutoTokenizer.from_pretrained(
         ORIGINAL_MODEL_NAME, trust_remote_code=True)
     model = AutoModelForCausalLM.from_pretrained(ORIGINAL_MODEL_NAME,
