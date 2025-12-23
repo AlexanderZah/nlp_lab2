@@ -62,10 +62,10 @@ def main():
     # Количество параметров ПОСЛЕ: 5686.59 mb
     print(
         f'Качество на бенчмарке MMLU ДО: {average_accuracy_before_quant:.4f}')
-    # Качество на бенчмарке MMLU ДО: 0.66
+    # Качество на бенчмарке MMLU ДО: 0.6579
     print(
         f'Качество на бенчмарке MMLU ПОСЛЕ: {average_accuracy_after_quant:.4f}')
-    # Качество на бенчмарке MMLU ПОСЛЕ: 0.65
+    # Качество на бенчмарке MMLU ПОСЛЕ: 0.6550
     Compression_ratio = size_before_quant_mb / size_after_quant_mb
     Performance_drop = (average_accuracy_before_quant -
                         average_accuracy_after_quant) / average_accuracy_before_quant
